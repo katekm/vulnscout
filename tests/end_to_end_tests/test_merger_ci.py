@@ -16,6 +16,7 @@ def init_files(tmp_path):
         "CDX_PATH": tmp_path / "input.cdx.json",
         "SPDX_FOLDER": tmp_path / "spdx",
         "SPDX_PATH": tmp_path / "spdx" / "input.spdx.json",
+        "SPDX3_PATH": tmp_path / "spdx" / "input.spdx3.json",
         "GRYPE_CDX_PATH": tmp_path / "cdx.grype.json",
         "GRYPE_SPDX_PATH": tmp_path / "spdx.grype.json",
         "YOCTO_FOLDER": tmp_path / "yocto_cve",
@@ -44,7 +45,9 @@ def test_running_script(init_files):
     out_all = json.loads(init_files["OUTPUT_PATH"].read_text())
     out_pkg = json.loads(init_files["OUTPUT_PKG_PATH"].read_text())
     out_vuln = json.loads(init_files["OUTPUT_VULN_PATH"].read_text())
-    out_assessment = json.loads(init_files["OUTPUT_ASSESSEMENT_PATH"].read_text())
+    out_assessment = json.loads(
+        init_files["OUTPUT_ASSESSEMENT_PATH"].read_text()
+    )
 
     assert "cairo@1.16.0" in out_pkg
     assert "cairo@1.16.0" in out_all["packages"]
@@ -69,13 +72,19 @@ def test_running_script(init_files):
     assert "CVE-2023-31124" in out_all["vulnerabilities"]
     assert "CVE-2024-2398" in out_vuln
     assert "CVE-2024-2398" in out_all["vulnerabilities"]
+    assert "CVE-2018-19876" in out_vuln
+    assert "CVE-2018-19876" in out_all["vulnerabilities"]
+    assert "CVE-2022-28391" in out_vuln
+    assert "CVE-2022-28391" in out_all["vulnerabilities"]
+    assert "CVE-2020-14354" in out_vuln
+    assert "CVE-2020-14354" in out_all["vulnerabilities"]
 
     vuln2398 = out_vuln["CVE-2024-2398"]
     assert vuln2398["effort"]["optimistic"] == "P1D"
     assert vuln2398["effort"]["likely"] == "P2DT4H"
     assert vuln2398["effort"]["pessimistic"] == "P1W"
 
-    assert len(out_assessment) == 6
+    assert len(out_assessment) == 7
     assert len(out_all["assessments"]) == len(out_assessment)
 
 
@@ -172,7 +181,8 @@ def test_expiration_vulnerabilities(init_files):
         "statements": [
             {
                 "vulnerability": {
-                    "@id": "https://nvd.nist.gov/vuln/detail/CVE-2002-FAKE-EXPIRED",
+                    "@id": ("https://nvd.nist.gov/vuln/detail/"
+                            "CVE-2002-FAKE-EXPIRED"),
                     "name": "CVE-2002-FAKE-EXPIRED"
                 },
                 "products": [
@@ -180,8 +190,10 @@ def test_expiration_vulnerabilities(init_files):
                 ],
                 "status": "under_investigation",
                 "action_statement": "Use product version 1.0+",
-                "action_statement_timestamp": "2023-01-08T18:02:03.647787998-06:00",
-                "status_notes": "This vulnerability was mitigated by the use of a color filter in image-pipeline.c",
+                "action_statement_timestamp": (
+                    "2023-01-08T18:02:03.647787998-06:00"),
+                "status_notes": ("This vulnerability was mitigated by the "
+                                 "use of a color filter in image-pipeline.c"),
                 "timestamp": "2023-01-06T15:05:42.647787998Z",
                 "last_updated": "2023-01-08T18:02:03.647787998Z",
 
@@ -189,7 +201,8 @@ def test_expiration_vulnerabilities(init_files):
             },
             {
                 "vulnerability": {
-                    "@id": "https://nvd.nist.gov/vuln/detail/CVE-2002-FAKE-EXPIRED",
+                    "@id": ("https://nvd.nist.gov/vuln/detail/"
+                            "CVE-2002-FAKE-EXPIRED"),
                     "name": "CVE-2020-35492"
                 },
                 "products": [
@@ -202,7 +215,8 @@ def test_expiration_vulnerabilities(init_files):
             },
             {
                 "vulnerability": {
-                    "@id": "https://nvd.nist.gov/vuln/detail/CVE-2002-FAKE-EXPIRED",
+                    "@id": ("https://nvd.nist.gov/vuln/detail/"
+                            "CVE-2002-FAKE-EXPIRED"),
                     "name": "CVE-2020-35492"
                 },
                 "products": [
@@ -210,7 +224,9 @@ def test_expiration_vulnerabilities(init_files):
                 ],
                 "status": "not_affected",
                 "justification": "component_not_present",
-                "status_notes": "Vulnerability no longer present in analysis, marking as expired",
+                "status_notes": (
+                    "Vulnerability no longer present in analysis, "
+                    "marking as expired"),
                 "timestamp": "2023-02-06T15:05:42.647787998Z",
                 "last_updated": "2023-02-08T18:02:03.647787998Z",
                 "scanners": ["some_scanner"]
@@ -220,7 +236,9 @@ def test_expiration_vulnerabilities(init_files):
 
     main()
 
-    out_assessment = json.loads(init_files["OUTPUT_ASSESSEMENT_PATH"].read_text())
+    out_assessment = json.loads(
+        init_files["OUTPUT_ASSESSEMENT_PATH"].read_text()
+    )
     found_expiration = False
     found_unexpired = False
 
@@ -228,13 +246,19 @@ def test_expiration_vulnerabilities(init_files):
         if assessment["vuln_id"] == "CVE-2002-FAKE-EXPIRED":
             if assessment["status"] == "not_affected":
                 assert assessment["justification"] == "component_not_present"
-                assert assessment["impact_statement"] == "Vulnerable component removed, marking as expired"
-                assert assessment["status_notes"] == "Vulnerability no longer present in analysis, marking as expired"
+                expected_impact = ("Vulnerable component removed, "
+                                   "marking as expired")
+                assert assessment["impact_statement"] == expected_impact
+                expected_notes = (
+                    "Vulnerability no longer present in analysis, "
+                    "marking as expired")
+                assert assessment["status_notes"] == expected_notes
                 found_expiration = True
 
         if assessment["vuln_id"] == "CVE-2020-35492":
             if (assessment["status"] == "affected"
-               and "Vulnerability was expired but is found again" in assessment["status_notes"]):
+               and "Vulnerability was expired but is found again"
+               in assessment["status_notes"]):
                 found_unexpired = True
     assert found_expiration
     assert found_unexpired

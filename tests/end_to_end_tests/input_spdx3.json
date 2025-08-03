@@ -1,0 +1,150 @@
+{
+    "@context": "https://spdx.org/rdf/3.0.1/spdx-context.jsonld",
+    "@graph": [
+        {
+            "type": "CreationInfo",
+            "@id": "_:CreationInfo1",
+            "created": "2025-01-15T10:00:00Z",
+            "createdBy": ["http://spdx.org/spdxdocs/e2e-test/agent/VulnScout"],
+            "createdUsing": ["http://spdx.org/spdxdocs/e2e-test/tool/vulnscout-test"],
+            "specVersion": "3.0.1"
+        },
+        {
+            "type": "software_Package",
+            "spdxId": "http://spdx.org/spdxdocs/cairo-test/package/cairo",
+            "creationInfo": "_:CreationInfo1",
+            "description": "Cairo graphics library",
+            "externalIdentifier": [
+                {
+                    "type": "ExternalIdentifier",
+                    "externalIdentifierType": "cpe23",
+                    "identifier": "cpe:2.3:a:cairographics:cairo:1.16.0:*:*:*:*:*:*:*"
+                }
+            ],
+            "name": "cairo",
+            "summary": "2D graphics library",
+            "software_primaryPurpose": "library",
+            "software_homePage": "https://www.cairographics.org/",
+            "software_packageVersion": "1.16.0"
+        },
+        {
+            "type": "software_Package",
+            "spdxId": "http://spdx.org/spdxdocs/busybox-test/package/busybox",
+            "creationInfo": "_:CreationInfo1",
+            "description": "BusyBox combines tiny versions of many common UNIX utilities",
+            "externalIdentifier": [
+                {
+                    "type": "ExternalIdentifier",
+                    "externalIdentifierType": "cpe23",
+                    "identifier": "cpe:2.3:a:busybox:busybox:1.35.0:*:*:*:*:*:*:*"
+                }
+            ],
+            "name": "busybox",
+            "summary": "Swiss Army knife of embedded Linux",
+            "software_primaryPurpose": "application",
+            "software_homePage": "https://busybox.net/",
+            "software_packageVersion": "1.35.0"
+        },
+        {
+            "type": "software_Package",
+            "spdxId": "http://spdx.org/spdxdocs/c-ares-test/package/c-ares",
+            "creationInfo": "_:CreationInfo1",
+            "description": "C library for asynchronous DNS requests",
+            "externalIdentifier": [
+                {
+                    "type": "ExternalIdentifier",
+                    "externalIdentifierType": "cpe23",
+                    "identifier": "cpe:2.3:a:c-ares_project:c-ares:1.18.1:*:*:*:*:*:*:*"
+                }
+            ],
+            "name": "c-ares",
+            "summary": "Asynchronous DNS library",
+            "software_primaryPurpose": "library",
+            "software_homePage": "https://c-ares.org/",
+            "software_packageVersion": "1.18.1"
+        },
+        {
+            "type": "security_Vulnerability",
+            "spdxId": "http://spdx.org/spdxdocs/cairo-test/vulnerability/CVE-2018-19876",
+            "creationInfo": "_:CreationInfo1",
+            "externalIdentifier": [
+                {
+                    "type": "ExternalIdentifier",
+                    "externalIdentifierType": "cve",
+                    "identifier": "CVE-2018-19876",
+                    "identifierLocator": [
+                        "https://cveawg.mitre.org/api/cve/CVE-2018-19876",
+                        "https://www.cve.org/CVERecord?id=CVE-2018-19876"
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "security_Vulnerability",
+            "spdxId": "http://spdx.org/spdxdocs/busybox-test/vulnerability/CVE-2022-28391",
+            "creationInfo": "_:CreationInfo1",
+            "externalIdentifier": [
+                {
+                    "type": "ExternalIdentifier",
+                    "externalIdentifierType": "cve",
+                    "identifier": "CVE-2022-28391",
+                    "identifierLocator": [
+                        "https://cveawg.mitre.org/api/cve/CVE-2022-28391",
+                        "https://www.cve.org/CVERecord?id=CVE-2022-28391"
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "security_Vulnerability",
+            "spdxId": "http://spdx.org/spdxdocs/c-ares-test/vulnerability/CVE-2020-14354",
+            "creationInfo": "_:CreationInfo1",
+            "externalIdentifier": [
+                {
+                    "type": "ExternalIdentifier",
+                    "externalIdentifierType": "cve",
+                    "identifier": "CVE-2020-14354",
+                    "identifierLocator": [
+                        "https://cveawg.mitre.org/api/cve/CVE-2020-14354",
+                        "https://www.cve.org/CVERecord?id=CVE-2020-14354"
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "Relationship",
+            "spdxId": "http://spdx.org/spdxdocs/cairo-test/relationship/1",
+            "creationInfo": "_:CreationInfo1",
+            "from": "http://spdx.org/spdxdocs/cairo-test/package/cairo",
+            "relationshipType": "hasAssociatedVulnerability",
+            "to": ["http://spdx.org/spdxdocs/cairo-test/vulnerability/CVE-2018-19876"]
+        },
+        {
+            "type": "Relationship",
+            "spdxId": "http://spdx.org/spdxdocs/busybox-test/relationship/2",
+            "creationInfo": "_:CreationInfo1",
+            "from": "http://spdx.org/spdxdocs/busybox-test/package/busybox",
+            "relationshipType": "hasAssociatedVulnerability",
+            "to": ["http://spdx.org/spdxdocs/busybox-test/vulnerability/CVE-2022-28391"]
+        },
+        {
+            "type": "Relationship",
+            "spdxId": "http://spdx.org/spdxdocs/c-ares-test/relationship/3",
+            "creationInfo": "_:CreationInfo1",
+            "from": "http://spdx.org/spdxdocs/c-ares-test/package/c-ares",
+            "relationshipType": "hasAssociatedVulnerability",
+            "to": ["http://spdx.org/spdxdocs/c-ares-test/vulnerability/CVE-2020-14354"]
+        },
+        {
+            "type": "security_VexNotAffectedVulnAssessmentRelationship",
+            "spdxId": "http://spdx.org/spdxdocs/cairo-test/vex-not-affected/1",
+            "creationInfo": "_:CreationInfo1",
+            "from": "http://spdx.org/spdxdocs/cairo-test/vulnerability/CVE-2018-19876",
+            "to": ["http://spdx.org/spdxdocs/cairo-test/package/cairo"],
+            "relationshipType": "doesNotAffect",
+            "security_vexVersion": "1.0.0",
+            "security_justificationType": "vulnerableCodeNotPresent",
+            "security_impactStatement": "This vulnerability does not affect this version of cairo"
+        }
+    ]
+}

@@ -3,11 +3,9 @@
 # Copyright (C) 2024 Savoir-faire Linux, Inc.
 # SPDX-License-Identifier: GPL-3.0-only
 
-import json
-
 
 def write_demo_files(files):
-    """Write files with an real-life example issued fron cairo vulnerability."""
+    """Write files with an real-life example from cairo vulnerability."""
 
     if "CDX_PATH" in files:
         with open("tests/end_to_end_tests/input_cdx.json", "r") as f:
@@ -16,6 +14,10 @@ def write_demo_files(files):
     if "SPDX_PATH" in files:
         with open("tests/end_to_end_tests/input_spdx.json", "r") as f:
             files["SPDX_PATH"].write_text(f.read())
+
+    if "SPDX3_PATH" in files:
+        with open("tests/end_to_end_tests/input_spdx3.json", "r") as f:
+            files["SPDX3_PATH"].write_text(f.read())
 
     if "GRYPE_CDX_PATH" in files:
         with open("tests/end_to_end_tests/grype_cdx.json", "r") as f:
